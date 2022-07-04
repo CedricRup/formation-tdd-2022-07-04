@@ -8,18 +8,25 @@ enum ResultatPartie {
 }
 
 function solver(grille : Grille){
-  let etatInitial = grille.getEtatCase(0,0)
-
-  for (let i = 1; i < 4; i++) {
-    const etatCase = grille.getEtatCase(0, i)
-
-    if (etatInitial !== etatCase) {
-      return ResultatPartie.Continue
+  for (let j = 0; j < 2; j++){
+    let gagnant = true
+    let etatInitial = grille.getEtatCase(0,j)
+    for (let i = 1; i < 4; i++) {
+      const etatCase = grille.getEtatCase(0, i+j)
+      
+      if (etatInitial !== etatCase) {
+        gagnant = false
+      }
+    }
+    if (gagnant) {
+      return versResultatPartie(etatInitial)
     }
   }
+    return ResultatPartie.Continue;
+}
 
-  return grille.getEtatCase(0,0) === EtatCase.Rouge ? ResultatPartie.GagnantRouge : ResultatPartie.GagnantJaune;
-
+function versResultatPartie(etatInitial: EtatCase) {
+  return etatInitial === EtatCase.Rouge ? ResultatPartie.GagnantRouge : ResultatPartie.GagnantJaune;
 }
 
 describe("solver", () => {
@@ -43,7 +50,7 @@ describe("solver", () => {
     expect(gagnant).toBe(ResultatPartie.GagnantJaune)
   })
 
-  it("Quand il y a ", () => {
+  it("Quand il n'y a pas 4 pions de même couleurs consécutifs, le jeu continue.", () => {
     const grille = new Grille()
     grille.ajouterPion(0,CouleurPion.Jaune)
     grille.ajouterPion(0,CouleurPion.Rouge)
@@ -51,5 +58,16 @@ describe("solver", () => {
     grille.ajouterPion(0,CouleurPion.Jaune)
     const gagnant = solver(grille)
     expect(gagnant).toBe(ResultatPartie.Continue)
+  })
+
+  it("", () => {
+    const grille = new Grille()
+    grille.ajouterPion(0,CouleurPion.Rouge)
+    grille.ajouterPion(0,CouleurPion.Jaune)
+    grille.ajouterPion(0,CouleurPion.Jaune)
+    grille.ajouterPion(0,CouleurPion.Jaune)
+    grille.ajouterPion(0,CouleurPion.Jaune)
+    const gagnant = solver(grille)
+    expect(gagnant).toBe(ResultatPartie.GagnantJaune)
   })
 })
