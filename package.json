@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "test": "jest --watch",
+    "lint": "eslint \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "devDependencies": {
+    "jest": "^28.1.2",
+    "typescript": "^4.7.4"
+  }
+}
