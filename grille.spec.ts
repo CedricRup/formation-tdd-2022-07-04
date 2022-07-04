@@ -19,11 +19,13 @@ class Grille {
     {
       return EtatCase.Vide
     }
-
     return etatCase
   }
 
   ajouterPion(colonne: number, couleur: CouleurPion) {
+    if(this.colonne1.length >= 6){
+      throw new Error("Cette colonne est pleine")
+    }
     this.colonne1.push(couleur === CouleurPion.Jaune ? EtatCase.Jaune : EtatCase.Rouge)
   }
 }
@@ -54,6 +56,43 @@ describe("grille", () => {
 
   it("Quand je demande l'état d'une case vide le resultat est vide", () => {
     const grille = new Grille();
+    const etatCase = grille.getEtatCase(0, 0)
+    expect(etatCase).toBe(EtatCase.Vide)
+  })
+
+  it("Je peux rajouter 6 pions dans une même colonne", () => {
+    const grille = new Grille();
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    const etatCase = grille.getEtatCase(0, 5)
+    expect(etatCase).toBe(EtatCase.Rouge)
+  })
+
+  it("Je peux rajouter 6 pions dans une même colonne", () => {
+    const grille = new Grille();
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    grille.ajouterPion(0, CouleurPion.Rouge)
+    expect(()=>grille.ajouterPion(0, CouleurPion.Rouge)).toThrow("Cette colonne est pleine")
+  })
+
+  xit("Je peux rajouter 1 pion dans la 2e colonne", () => {
+    const grille = new Grille();
+    grille.ajouterPion(1, CouleurPion.Rouge)
+    const etatCase = grille.getEtatCase(1, 0)
+    expect(etatCase).toBe(EtatCase.Rouge)
+  })
+
+  it("Je peux rajouter 1 pion dans la 2e colonne et la premiere reste vide", () => {
+    const grille = new Grille();
+    grille.ajouterPion(1, CouleurPion.Rouge)
     const etatCase = grille.getEtatCase(0, 0)
     expect(etatCase).toBe(EtatCase.Vide)
   })
