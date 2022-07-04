@@ -11,10 +11,10 @@ enum CouleurPion {
 
 class Grille {
 
-  colonne1 : EtatCase[] = []
+  colonnes : EtatCase[][] = [[],[],[],[],[],[],[]]
   
   getEtatCase(x: number, y: number) {
-    const etatCase = this.colonne1[y]
+    const etatCase = this.colonnes[x][y]
     if (etatCase != EtatCase.Jaune && etatCase != EtatCase.Rouge)
     {
       return EtatCase.Vide
@@ -22,11 +22,14 @@ class Grille {
     return etatCase
   }
 
-  ajouterPion(colonne: number, couleur: CouleurPion) {
-    if(this.colonne1.length >= 6){
+  ajouterPion(numeroColonne: number, couleur: CouleurPion) {
+    if(numeroColonne > 6 || numeroColonne < 0){
+      throw new Error("Cette colonne n'existe pas")
+    }
+    if(this.colonnes[numeroColonne].length >= 6){
       throw new Error("Cette colonne est pleine")
     }
-    this.colonne1.push(couleur === CouleurPion.Jaune ? EtatCase.Jaune : EtatCase.Rouge)
+    this.colonnes[numeroColonne].push(couleur === CouleurPion.Jaune ? EtatCase.Jaune : EtatCase.Rouge)
   }
 }
 
@@ -83,7 +86,7 @@ describe("grille", () => {
     expect(()=>grille.ajouterPion(0, CouleurPion.Rouge)).toThrow("Cette colonne est pleine")
   })
 
-  xit("Je peux rajouter 1 pion dans la 2e colonne", () => {
+  it("Je peux rajouter 1 pion dans la 2e colonne", () => {
     const grille = new Grille();
     grille.ajouterPion(1, CouleurPion.Rouge)
     const etatCase = grille.getEtatCase(1, 0)
@@ -96,4 +99,26 @@ describe("grille", () => {
     const etatCase = grille.getEtatCase(0, 0)
     expect(etatCase).toBe(EtatCase.Vide)
   })
+
+
+  it("Je peux rajouter 1 pion dans la 7e colonne", () => {
+    const grille = new Grille();
+    grille.ajouterPion(6, CouleurPion.Rouge)
+    const etatCase = grille.getEtatCase(6, 0)
+    expect(etatCase).toBe(EtatCase.Rouge)
+  })
+
+
+  it("Je peux pas rajouter 1 pion dans la 8e colonne", () => {
+    const grille = new Grille();
+    expect(()=>grille.ajouterPion(7, CouleurPion.Rouge)).toThrow("Cette colonne n'existe pas")
+  })
+
+
+  it("Je peux pas rajouter 1 pion dans une colonne < 0", () => {
+    const grille = new Grille();
+    expect(()=>grille.ajouterPion(-1, CouleurPion.Rouge)).toThrow("Cette colonne n'existe pas")
+  })
+
+
 })
