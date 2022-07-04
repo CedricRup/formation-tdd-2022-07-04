@@ -1,4 +1,4 @@
 {
   "testEnvironment": "node",
-  "testMatch": ["**/(*.)spec.ts?(x)"]
+  "preset": "jest-preset-typescript"
 }
