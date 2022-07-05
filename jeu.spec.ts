@@ -14,21 +14,26 @@ class FausseConsole implements IConsole {
     }
 }
 
+
 describe("jeu", () =>{
 
-    it("Au début de la partie la console indique que Jaune commence", () => {
+    it("Au début de la partie la console indique que Jaune commence", async () => {
         // const fausseConsole = new FausseConsole()
         const fausseConsole = {ecrire : jest.fn()}
-        const jeu = new Jeu(fausseConsole)
-        jeu.demarrerPartie()
+        const fauxPrompt = {demanderColonne : jest.fn()}
+        fauxPrompt.demanderColonne.mockResolvedValue(0)
+        const jeu = new Jeu(fausseConsole,fauxPrompt)
+        await jeu.demarrerPartie()
         // expect(fausseConsole.aEteAppeleeAvec("C'est à jaune de jouer")).toBe(true)
         expect(fausseConsole.ecrire).toHaveBeenCalledWith("C'est à jaune de jouer")
     })
 
-    it("Quand un joueur joue un coup valide, la console envoie un message de validation", () => {
+    it("Quand un joueur joue un coup valide, la console envoie un message de validation", async () => {
         const fausseConsole = {ecrire : jest.fn()}
-        const jeu = new Jeu(fausseConsole)
-        jeu.demarrerPartie()
+        const fauxPrompt = {demanderColonne : jest.fn()}
+        fauxPrompt.demanderColonne.mockResolvedValue(1)
+        const jeu = new Jeu(fausseConsole,fauxPrompt)
+        await jeu.demarrerPartie()
         expect(fausseConsole.ecrire).toHaveBeenCalledWith("Coup valide")
     })
 })

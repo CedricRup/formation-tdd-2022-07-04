@@ -1,5 +1,3 @@
-
-
 import {Arbitre} from "./arbitre";
 import {Grille} from "./grille";
 
@@ -9,38 +7,43 @@ const readline = require('readline').createInterface({
 });
 
 export interface IConsole {
-    ecrire : (message : string) => void
+    ecrire: (message: string) => void
 }
 
 interface IPrompt {
-    demanderColonne : ((colonne:number) => void)
+    demanderColonne: () => Promise<number>
 }
 
-class VraiPrompt implements IPrompt{
-    demanderColonne(){
-        readline.question("à toi de jouer", (colonne:string)=> {
-            return parseInt(colonne)
+export class VraiPrompt implements IPrompt {
+    demanderColonne() {
+        return new Promise<number>((resolve, reject) => {
+            readline.question("à toi de jouer", (colonne: string) => {
+
+                resolve(parseInt(colonne))
+            })
         })
     }
 }
 
 export class Jeu {
-    console : IConsole
-    arbitre : Arbitre
+    console: IConsole
+    arbitre: Arbitre
+    prompt: IPrompt
 
-    constructor(console : IConsole){
+    constructor(console: IConsole, prompt: IPrompt) {
         this.console = console
         this.arbitre = new Arbitre(new Grille())
+        this.prompt = prompt
     }
 
-    demarrerPartie() {
+    async demarrerPartie() {
         this.console.ecrire("C'est à jaune de jouer")
-        readline.question("à toi de jouer", (colonne:string)=> {
-            if (colonne) {
-                this.arbitre.jouerPion(parseInt(colonne))
-                this.console.ecrire("Coup valide")
-            }
-        })
+        const colonne = await this.prompt.demanderColonne()
+        console.log("Colonne : ",colonne)
+        if (colonne) {
+            this.arbitre.jouerPion(colonne)
+            this.console.ecrire("Coup valide")
+        }
     }
 }
 
