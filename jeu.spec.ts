@@ -1,8 +1,6 @@
-import { Joueur } from "./arbitre"
 
-interface IConsole {
-    ecrire : (message : string) => void
-}
+import { IConsole, Jeu } from "./jeu"
+
 
 class FausseConsole implements IConsole {
     messages : string[] = []
@@ -16,23 +14,14 @@ class FausseConsole implements IConsole {
     }
 }
 
-class Jeu {
-    //console : IConsole
-
-    constructor(console : IConsole){
-
-    }
-
-    demarrerPartie() {
-
-    }
-}
-
 describe("jeu", () =>{
-    it("", () => {
-        const fausseConsole = new FausseConsole()
+
+    it("Au début de la partie la console indique que Jaune commence", () => {
+        // const fausseConsole = new FausseConsole()
+        const fausseConsole = {ecrire : jest.fn()}
         const jeu = new Jeu(fausseConsole)
         jeu.demarrerPartie()
-        expect(fausseConsole.aEteAppeleeAvec("C'est à jaune de jouer")).toBe(true)
+        // expect(fausseConsole.aEteAppeleeAvec("C'est à jaune de jouer")).toBe(true)
+        expect(fausseConsole.ecrire).toHaveBeenCalledWith("C'est à jaune de jouer")
     })
 })
