@@ -25,6 +25,9 @@ function versResultatPartie(etatInitial: EtatCase) {
 
 function donneGagnantVertical(grille: Grille, j: number) {
     let etatInitial = grille.getEtatCase(0, j);
+    if (etatInitial === EtatCase.Vide) {
+        return ResultatPartie.Continue
+    }
     for (let i = 1; i < 4; i++) {
         const etatCase = grille.getEtatCase(0, i + j);
 

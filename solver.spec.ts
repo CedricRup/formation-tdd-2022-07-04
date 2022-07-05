@@ -54,4 +54,11 @@ describe("solver", () => {
     const gagnant = solver(grille);
     expect(gagnant).toBe(ResultatPartie.GagnantJaune);
   });
+
+  it("On ajoute un pion et la partie continue", () => {
+    const grille = new Grille();
+    grille.ajouterPion(0, CouleurPion.Jaune);
+    const gagnant = solver(grille);
+    expect(gagnant).toBe(ResultatPartie.Continue);
+  })
 });
