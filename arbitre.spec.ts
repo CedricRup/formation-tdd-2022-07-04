@@ -1,41 +1,6 @@
-import {CouleurPion, EtatCase, Grille} from "./grille";
-import { ResultatPartie, solver } from "./solver";
+import {EtatCase, Grille} from "./grille";
+import { Arbitre, Joueur } from "./arbitre";
 
-
-enum Joueur {
-  Jaune,
-  Rouge
-}
-class Arbitre {
-  joueurCourant = Joueur.Jaune
-  grille : Grille
-  constructor(grille: Grille) {
-    this.grille = grille
-  }
-
-  getJoueurCourant() {
-    return this.joueurCourant;
-  }
-
-  getResultatPartie() {
-    return solver(this.grille);
-  }
-
-  jouerPion(colonne: number) {
-    try {
-      if (this.joueurCourant === Joueur.Rouge) {
-        this.grille.ajouterPion(colonne, CouleurPion.Rouge)
-        this.joueurCourant = Joueur.Jaune
-      } else {
-        this.grille.ajouterPion(colonne, CouleurPion.Jaune)
-        this.joueurCourant = Joueur.Rouge
-      }
-    }
-    catch(erreur : unknown){
-      throw erreur
-    }
-  }
-}
 
 describe("arbitre", () => {
   let arbitre : Arbitre
@@ -87,35 +52,6 @@ describe("arbitre", () => {
     expect(() => arbitre.jouerPion(7)).toThrow("Cette colonne n'existe pas")
   })
 
-  it("Victoire Jaune", () => {
-    arbitre.jouerPion(0)
-    arbitre.jouerPion(1)
-    arbitre.jouerPion(0)
-    arbitre.jouerPion(1)
-    arbitre.jouerPion(0)
-    arbitre.jouerPion(1)
-    arbitre.jouerPion(0)
 
-    expect(arbitre.getResultatPartie()).toBe(ResultatPartie.GagnantJaune)
-  })
-
-  it("Victoire Rouge", () => {
-    arbitre.jouerPion(3)
-    arbitre.jouerPion(0)
-    arbitre.jouerPion(1)
-    arbitre.jouerPion(0)
-    arbitre.jouerPion(1)
-    arbitre.jouerPion(0)
-    arbitre.jouerPion(1)
-    arbitre.jouerPion(0)
-
-    expect(arbitre.getResultatPartie()).toBe(ResultatPartie.GagnantRouge)
-  })
-
-  it("La partie continue", () => {
-    arbitre.jouerPion(0)
-
-    expect(arbitre.getResultatPartie()).toBe(ResultatPartie.Continue)
-  })
 
 })
