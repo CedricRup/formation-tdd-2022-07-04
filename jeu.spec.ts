@@ -24,14 +24,13 @@ describe("jeu", () =>{
         fauxPrompt.demanderColonne.mockResolvedValue(0)
         const jeu = new Jeu(fausseConsole,fauxPrompt)
         await jeu.demarrerPartie()
-        // expect(fausseConsole.aEteAppeleeAvec("C'est à jaune de jouer")).toBe(true)
         expect(fausseConsole.ecrire).toHaveBeenCalledWith("C'est à jaune de jouer")
     })
 
     it("Quand un joueur joue un coup valide, la console envoie un message de validation", async () => {
         const fausseConsole = {ecrire : jest.fn()}
         const fauxPrompt = {demanderColonne : jest.fn()}
-        fauxPrompt.demanderColonne.mockResolvedValue(1)
+        fauxPrompt.demanderColonne.mockResolvedValue(0)
         const jeu = new Jeu(fausseConsole,fauxPrompt)
         await jeu.demarrerPartie()
         expect(fausseConsole.ecrire).toHaveBeenCalledWith("Coup valide")
